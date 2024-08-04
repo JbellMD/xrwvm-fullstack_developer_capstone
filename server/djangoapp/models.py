@@ -16,8 +16,11 @@ class CarMake(models.Model):
         return self.name  # Return the name as the string representation
 
 
+
+# CarModel model to save data about a car's model
 class CarModel(models.Model):
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)  # Many-to-One relationship
+    dealer_id = models.IntegerField()
     name = models.CharField(max_length=100)
     CAR_TYPES = [
         ('SEDAN', 'Sedan'),
@@ -31,7 +34,6 @@ class CarModel(models.Model):
             MaxValueValidator(2023),
             MinValueValidator(2015)
         ])
-    # Other fields as needed
-
+    
     def __str__(self):
-        return self.name  # Return the name as the string representation
+        return f"{self.car_make.name} {self.name}"
