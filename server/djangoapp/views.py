@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
@@ -24,11 +23,13 @@ def login_user(request):
         response_data["status"] = "Authenticated"
     return JsonResponse(response_data)
 
+
 @csrf_exempt
 def logout_request(request):
     username = request.user.username
     logout(request)
     return JsonResponse({"userName": username})
+
 
 @csrf_exempt
 def registration(request):
@@ -49,6 +50,7 @@ def registration(request):
         return JsonResponse({"userName": username, 
                              "status": "Authenticated"})
 
+
 @csrf_exempt
 def get_cars(request):
     if CarMake.objects.count() == 0:
@@ -58,6 +60,7 @@ def get_cars(request):
              "CarMake": car_model.car_make.name} for car_model in car_models]
     return JsonResponse({"CarModels": cars})
 
+
 @csrf_exempt
 def get_dealerships(request, state="All"):
     endpoint = f"/fetchDealers/{state}" 
@@ -65,6 +68,7 @@ def get_dealerships(request, state="All"):
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, 
                          "dealers": dealerships})
+
 
 @csrf_exempt
 def get_dealer_reviews(request, dealer_id):
@@ -79,6 +83,7 @@ def get_dealer_reviews(request, dealer_id):
     return JsonResponse({"status": 400, 
                          "message": "Bad Request"})
 
+
 @csrf_exempt
 def get_dealer_details(request, dealer_id):
     if dealer_id:
@@ -88,6 +93,7 @@ def get_dealer_details(request, dealer_id):
                              "dealer": dealership})
     return JsonResponse({"status": 400, 
                          "message": "Bad Request"})
+
 
 @csrf_exempt
 def add_review(request):
