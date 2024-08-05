@@ -63,8 +63,7 @@ def get_cars(request):
 
 @csrf_exempt
 def get_dealerships(request, state="All"):
-    endpoint = f"/fetchDealers/{state}" 
-    if state != "All" else "/fetchDealers"
+    endpoint = f"/fetchDealers/{state}" if state != "All" else "/fetchDealers"
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, 
                          "dealers": dealerships})
