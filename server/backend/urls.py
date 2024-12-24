@@ -1,18 +1,21 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic import TemplateView
-from django.conf.urls.static import static
+from .views import get_dealers
 from django.conf import settings
-from . import views
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # API endpoints first
+    path('api/dealers/', get_dealers, name='get_dealers'),
+    path('api/dealers/<str:state>/', get_dealers, name='get_dealers_by_state'),
+    
+    # Admin
     path('admin/', admin.site.urls),
     
-    # API endpoints
-    path('api/dealers/', views.get_dealers, name='get_dealers'),
-    path('api/dealers/<str:state>/', views.get_dealers, name='get_dealers_by_state'),
+    # Serve static files
+    *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
     
-    # React routes - serve index.html for all other routes
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    path('<path:path>', TemplateView.as_view(template_name='index.html'), name='index'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # Serve React's index.html for all other routes
+    re_path(r'^(?!api/).*$', TemplateView.as_view(template_name='index.html'), name='index'),
+]

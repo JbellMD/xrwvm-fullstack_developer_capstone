@@ -12,13 +12,19 @@ const Dealers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Use absolute path for API endpoints
   const dealer_url = "/api/dealers";
   
   const filterDealers = async (state) => {
     try {
       setLoading(true);
       const url = state === "All" ? dealer_url : `${dealer_url}/${state}`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
       if (data.status === 200) {
@@ -38,7 +44,12 @@ const Dealers = () => {
     const fetchDealers = async () => {
       try {
         setLoading(true);
-        const response = await fetch(dealer_url);
+        const response = await fetch(dealer_url, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         if (data.status === 200) {
