@@ -1,3 +1,5 @@
+/* Login.css is now mostly handled by Material-UI styled components */
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -60,4 +62,22 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.MuiContainer-root {
+  padding: 0 !important;
+}
+
+.MuiPaper-root {
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .MuiTypography-h4 {
+    font-size: 1.5rem !important;
+  }
+  
+  .MuiButton-root {
+    padding: 8px 16px !important;
+  }
 }
