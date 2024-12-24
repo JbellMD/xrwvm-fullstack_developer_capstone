@@ -5,6 +5,8 @@ import "./Dealers.css";
 import "../../assets/style.css";
 import Header from '../Header/Header';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const Dealers = () => {
   const navigate = useNavigate();
   const [dealersList, setDealersList] = useState([]);
@@ -12,8 +14,7 @@ const Dealers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Use absolute path for API endpoints
-  const dealer_url = "/api/dealers";
+  const dealer_url = `${API_BASE_URL}/api/dealers`;
   
   const filterDealers = async (state) => {
     try {
@@ -44,6 +45,7 @@ const Dealers = () => {
     const fetchDealers = async () => {
       try {
         setLoading(true);
+        console.log('Fetching dealers from:', dealer_url);
         const response = await fetch(dealer_url, {
           headers: {
             'Accept': 'application/json',
@@ -68,7 +70,7 @@ const Dealers = () => {
     };
 
     fetchDealers();
-  }, []);
+  }, [dealer_url]);
 
   const isLoggedIn = sessionStorage.getItem("username") != null;
 
@@ -94,10 +96,10 @@ const Dealers = () => {
               <p>{dealer.city}, {dealer.state} {dealer.zip}</p>
               <div className="dealer-stats">
                 <span className="rating">
-                  <FaStar /> {dealer.avg_rating.toFixed(1)}
+                  <FaStar /> {dealer.avg_rating?.toFixed(1) || 'N/A'}
                 </span>
                 <span className="reviews">
-                  <FaCommentAlt /> {dealer.review_count}
+                  <FaCommentAlt /> {dealer.review_count || 0}
                 </span>
               </div>
               {isLoggedIn && (
