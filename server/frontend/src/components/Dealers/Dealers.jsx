@@ -11,7 +11,6 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
   Box,
   AppBar,
   Toolbar,
@@ -21,7 +20,6 @@ import {
 } from '@mui/material';
 import {
   LocationOn,
-  Star,
   Comment,
   Logout,
   Store,
