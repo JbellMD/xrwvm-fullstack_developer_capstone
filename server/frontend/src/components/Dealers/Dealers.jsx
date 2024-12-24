@@ -9,31 +9,50 @@ const Dealers = () => {
   const navigate = useNavigate();
   const [dealersList, setDealersList] = useState([]);
   const [states, setStates] = useState([]);
-  const dealer_url = "/djangoapp/get_dealers";
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const dealer_url = "/api/dealers";
   
   const filterDealers = async (state) => {
-    const url = state === "All" ? dealer_url : `${dealer_url}/${state}`;
-    const res = await fetch(url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    if (retobj.status === 200) {
-      setDealersList(retobj.dealers);
+    try {
+      setLoading(true);
+      const url = state === "All" ? dealer_url : `${dealer_url}/${state}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      const data = await res.json();
+      if (data.status === 200) {
+        setDealersList(data.dealers);
+      } else {
+        throw new Error(data.error || 'Failed to fetch dealers');
+      }
+    } catch (error) {
+      console.error('Error filtering dealers:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     const fetchDealers = async () => {
       try {
+        setLoading(true);
         const response = await fetch(dealer_url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         if (data.status === 200) {
           setDealersList(data.dealers);
           const uniqueStates = [...new Set(data.dealers.map(dealer => dealer.state))];
-          setStates(['All', ...uniqueStates]);
+          setStates(['All', ...uniqueStates.sort()]);
+        } else {
+          throw new Error(data.error || 'Failed to fetch dealers');
         }
       } catch (error) {
         console.error('Error fetching dealers:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -41,6 +60,9 @@ const Dealers = () => {
   }, []);
 
   const isLoggedIn = sessionStorage.getItem("username") != null;
+
+  if (loading) return <div className="loading">Loading dealers...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
     <div className="dealers-container">
@@ -53,28 +75,28 @@ const Dealers = () => {
             ))}
           </select>
         </div>
-        <div className="dealers-list">
-          {dealersList.map((dealer, index) => (
-            <div key={index} className="dealer-card">
+        <div className="dealers-grid">
+          {dealersList.map((dealer) => (
+            <div key={dealer.id} className="dealer-card">
               <h3>{dealer.full_name}</h3>
               <p>{dealer.address}</p>
-              <p>{dealer.city}, {dealer.state}</p>
-              <div className="dealer-actions">
+              <p>{dealer.city}, {dealer.state} {dealer.zip}</p>
+              <div className="dealer-stats">
+                <span className="rating">
+                  <FaStar /> {dealer.avg_rating.toFixed(1)}
+                </span>
+                <span className="reviews">
+                  <FaCommentAlt /> {dealer.review_count}
+                </span>
+              </div>
+              {isLoggedIn && (
                 <button 
                   onClick={() => navigate(`/dealer/${dealer.id}`)}
-                  className="view-reviews"
+                  className="view-details-btn"
                 >
-                  <FaStar /> View Reviews
+                  View Details
                 </button>
-                {isLoggedIn && (
-                  <button 
-                    onClick={() => navigate(`/postreview/${dealer.id}`)}
-                    className="post-review"
-                  >
-                    <FaCommentAlt /> Post Review
-                  </button>
-                )}
-              </div>
+              )}
             </div>
           ))}
         </div>
