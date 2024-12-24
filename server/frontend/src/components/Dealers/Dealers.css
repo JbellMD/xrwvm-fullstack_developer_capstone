@@ -86,3 +86,251 @@ table{
   transform: scale(1.1);
   border: solid lightgray;
 }
+
+.dealers-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.filters {
+  margin-bottom: 2rem;
+  text-align: right;
+}
+
+.filters select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+.dealers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.dealer-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.dealer-card:hover {
+  transform: translateY(-2px);
+}
+
+.dealer-card h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.dealer-card p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.dealer-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.dealer-actions button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.view-reviews {
+  background-color: #007bff;
+  color: white;
+}
+
+.view-reviews:hover {
+  background-color: #0056b3;
+}
+
+.post-review {
+  background-color: #28a745;
+  color: white;
+}
+
+.post-review:hover {
+  background-color: #218838;
+}
+
+.dealer-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.dealer-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
+
+.dealer-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.dealer-info p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.reviews-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.add-review-button {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.add-review-button:hover {
+  background-color: #218838;
+}
+
+.no-reviews {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+.reviews-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.review-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-filled {
+  color: #ffc107;
+}
+
+.star-empty {
+  color: #e4e5e9;
+}
+
+.review-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.review-text {
+  margin: 1rem 0;
+  color: #333;
+  line-height: 1.5;
+}
+
+.reviewer {
+  color: #666;
+  font-style: italic;
+  text-align: right;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .content,
+  .dealer-detail-container {
+    padding: 1rem;
+  }
+  
+  .dealers-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .dealer-actions {
+    flex-direction: column;
+  }
+  
+  .dealer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .reviews-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .add-review-button {
+    width: 100%;
+  }
+}

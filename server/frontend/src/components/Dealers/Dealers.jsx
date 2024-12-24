@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaStar, FaCommentAlt } from 'react-icons/fa';
 import "./Dealers.css";
-import "../assets/style.css";
+import "../../assets/style.css";
 import Header from '../Header/Header';
-import review_icon from "../assets/reviewicon.png";
 
 const Dealers = () => {
+  const navigate = useNavigate();
   const [dealersList, setDealersList] = useState([]);
   const [states, setStates] = useState([]);
   const dealer_url = "/djangoapp/get_dealers";
@@ -18,72 +20,67 @@ const Dealers = () => {
     if (retobj.status === 200) {
       setDealersList(retobj.dealers);
     }
-  }
-
-  const get_dealers = async () => {
-    const res = await fetch(dealer_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    if (retobj.status === 200) {
-      const all_dealers = retobj.dealers;
-      const uniqueStates = [...new Set(all_dealers.map(dealer => dealer.state))];
-      setStates(uniqueStates);
-      setDealersList(all_dealers);
-    }
-  }
+  };
 
   useEffect(() => {
-    get_dealers();
+    const fetchDealers = async () => {
+      try {
+        const response = await fetch(dealer_url);
+        const data = await response.json();
+        if (data.status === 200) {
+          setDealersList(data.dealers);
+          const uniqueStates = [...new Set(data.dealers.map(dealer => dealer.state))];
+          setStates(['All', ...uniqueStates]);
+        }
+      } catch (error) {
+        console.error('Error fetching dealers:', error);
+      }
+    };
+
+    fetchDealers();
   }, []);
 
   const isLoggedIn = sessionStorage.getItem("username") != null;
 
   return (
-    <div>
+    <div className="dealers-container">
       <Header />
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Dealer Name</th>
-            <th>City</th>
-            <th>Address</th>
-            <th>Zip</th>
-            <th>
-              <select name="state" id="state" onChange={(e) => filterDealers(e.target.value)}>
-                <option value="" selected disabled hidden>State</option>
-                <option value="All">All States</option>
-                {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-            </th>
-            {isLoggedIn && <th>Review Dealer</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {dealersList.map(dealer => (
-            <tr key={dealer.id}>
-              <td>{dealer.id}</td>
-              <td><a href={'/dealer/' + dealer.id}>{dealer.full_name}</a></td>
-              <td>{dealer.city}</td>
-              <td>{dealer.address}</td>
-              <td>{dealer.zip}</td>
-              <td>{dealer.state}</td>
-              {isLoggedIn && (
-                <td>
-                  <a href={`/postreview/${dealer.id}`}>
-                    <img src={review_icon} className="review_icon" alt="Post Review" />
-                  </a>
-                </td>
-              )}
-            </tr>
+      <div className="content">
+        <div className="filters">
+          <select onChange={(e) => filterDealers(e.target.value)}>
+            {states.map((state, index) => (
+              <option key={index} value={state}>{state}</option>
+            ))}
+          </select>
+        </div>
+        <div className="dealers-list">
+          {dealersList.map((dealer, index) => (
+            <div key={index} className="dealer-card">
+              <h3>{dealer.full_name}</h3>
+              <p>{dealer.address}</p>
+              <p>{dealer.city}, {dealer.state}</p>
+              <div className="dealer-actions">
+                <button 
+                  onClick={() => navigate(`/dealer/${dealer.id}`)}
+                  className="view-reviews"
+                >
+                  <FaStar /> View Reviews
+                </button>
+                {isLoggedIn && (
+                  <button 
+                    onClick={() => navigate(`/postreview/${dealer.id}`)}
+                    className="post-review"
+                  >
+                    <FaCommentAlt /> Post Review
+                  </button>
+                )}
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Dealers;
