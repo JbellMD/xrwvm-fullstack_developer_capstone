@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-content">
-        <h1>Dealership Reviews</h1>
+        <h1>DealershipHub Reviews</h1>
         <nav>
           <button onClick={() => navigate('/dealers')} className="nav-button">
             Dealers
